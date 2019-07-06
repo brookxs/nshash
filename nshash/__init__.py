@@ -83,11 +83,13 @@ class NSHash:
             self.db = HashDBMemory(name)
         else:
             self.db = HashDBLeveldb(name)
+        # 获取最大的相似度id
         self.max_similar_id = self.db.get('max_similar_id')
         if self.max_similar_id is None:
             self.max_similar_id = 0
 
     def get_nshash(self, doc, n=5):
+        """获取前5句子的哈希列表"""
         sentences = re.split(r':|：|；|？|。|！|】|\n', doc)
         ss = [s for s in sentences if len(s)>30]
         if not ss:
@@ -98,6 +100,7 @@ class NSHash:
         return hashes
 
     def get_similar(self, doc):
+        """获取相似文档id"""
         hashes = self.get_nshash(doc)
         doc_similar_id = 0
         simids = []
